@@ -1,0 +1,16 @@
+[user]
+	name = adam-fisher37
+	email = adf49@case.edu
+[core]
+	editor = subl
+[alias]
+	# one-line log
+    l = log --pretty=format:"%C(yellow)%h\\ %ad%Cred%d\\ %Creset%s%Cblue\\ [%cn]" --decorate --date=short
+    # list aliases
+    la = "!git config -l | grep alias | cut -c 7-"
+    # if you want a non-git alias needs "! command"
+    # open envs
+    # ml_env = "conda activate ml_env"
+    # modern_boi = "conda activate modern_boi"
+    # uni_py = "conda activate uni_py"
+    # uni_py_gpib = "conda activate uni_py_gpib"
