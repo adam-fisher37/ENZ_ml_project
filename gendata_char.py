@@ -40,7 +40,7 @@ l = np.ones(15)
 num_mat = len(materials)
 
 
-def gen_dat(ang, set_length, comments, core=True):
+def gen_dat(ang, set_length, comments, dset, core=True):
 	'''
 	This generates and  saves (as an .hdf5 file) the training data for a 5x tri-layer nonuniform metamaterial
 	calculates rp, rs, tp, ts, psi, delta over user-defined angles
@@ -55,6 +55,9 @@ def gen_dat(ang, set_length, comments, core=True):
 	ang - array, [A] - the angle (deg) of incidence, use what you would use on your ellipsometer
 	set_length - integer - number of structures you are simulating, recomend .5 mil
 	comments - string - any extra comments you would like to add to the .txt file that gives details about the data generated
+	^NOTE: running this multiple times in 1 day will not cause an overwrite because there is an append feature when writing to .txt files
+	dset - string - the name of the dataset that this batch of results will be placed in
+	^NOTE: if you run htis program multiple times in 1 day without changing this input for each run, it will overwrite any previous data, as I do not believe that h5py has an append capability
 	core - bool - defualt True, determines whether to use multiple cores or just 1 (for testing/debuging)
 	OUTPUTS:
 	none - will generate and save the data and then close the file in this funct
@@ -100,11 +103,16 @@ def gen_dat(ang, set_length, comments, core=True):
 	coms = open(fname+'comments.txt','w') # change to 'a' if adding stuff
 	coms.write(com)
 	coms.write(com1)
-	coms.write(comments)
 	coms.close()
+	# appending any notes if running multiple times in 1 day
+	c = open(fname+'comments.txt','a')
+	c.write(comments)
+	c.close()
+
 	# count cores for multiprocessing
 	if core:
-		cores = multiprocessing.cpu_count()
+		cores = 6
+		# cores = multiprocessing.cpu_count() # currently hard-set will change later
 	else:
 		cores = 1
 	print('Will parallelize with %d cores.\n'%(cores))
@@ -113,7 +121,7 @@ def gen_dat(ang, set_length, comments, core=True):
 	f = h5py.File(fname+'.hdf5','w')
 	# dataset -> 'batch'+number
 	res = Parallel(n_jobs=cores)(delayed(gen)() for i in range(set_length))
-	dset = f.create_dataset('batch',data=res)
+	dset = f.create_dataset(dset,data=res)
 	del res
 	f.close()
 	print('congrats u done!')
