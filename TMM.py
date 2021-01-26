@@ -326,11 +326,25 @@ def emax(l,n):
     '''
     returns the effective medium approx in the direction of the incidence of light
     inputs:
-    l - Nx1 array, float - the thickness of each layer for all N layers, nm
+    l - Nx1 array, COMPLEX - the thickness of each layer for all N layers, nm
     NOTE: in order to work with numba, data types of intputs for np.dot, MUST be the same
     please input array l as l.astype(complex) in order to ensure function
     n - N x lam array, complex  - the complex index of refraction for N layers as a function of wavelength over wavelength region of interest, lam
     outputs:
-    epsilon - lam x 1, complex - the complex effective dielectric coefficent as funct of wavelength for lam wavelengths
+    epsilon_x - lam x 1, complex - the complex effective dielectric coefficent as funct of wavelength for lam wavelengths
     '''
-    return np.dot(np.divide(l,np.sum(l)),np.square(np.conj(n)))
+    return np.dot(np.divide(l,np.sum(l)),np.square(n))
+
+@jit(nopython=True)
+def emaz(l,n):
+	'''
+	returns the ema approx perpendicular to the direction of the incidence of light
+	inputs:
+    l - Nx1 array, COMPLEX - the thickness of each layer for all N layers, nm
+    NOTE: in order to work with numba, data types of intputs for np.dot, MUST be the same
+    please input array l as l.astype(complex) in order to ensure function
+    n - N x lam array, complex  - the complex index of refraction for N layers as a function of wavelength over wavelength region of interest, lam
+    outputs:
+    epsilon_z - lam x 1, complex - the complex effective dielectric coefficent as funct of wavelength for lam wavelengths
+	'''
+	return (np.dot(np.divide(l,np.sum(l)),(1/np.square(n))))**(-1)
