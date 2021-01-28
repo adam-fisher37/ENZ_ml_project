@@ -42,6 +42,7 @@ num_mat = len(materials)
 
 def gen_dat(ang, set_length, comments, dset, core=True):
 	'''
+	NOTE: currently this program should only be run once a day!
 	This generates and  saves (as an .hdf5 file) the training data for a 5x tri-layer nonuniform metamaterial
 	calculates rp, rs, tp, ts, psi, delta over user-defined angles
 	pretty much fire and forget so has a bunch of assumptions
@@ -95,20 +96,15 @@ def gen_dat(ang, set_length, comments, dset, core=True):
 	# make file
 	date = datetime.datetime.now()
 	# file name, for both the comments and h5 file, maybe want to have first lil string be an input
-	fname = 'traindata_enzchar'+'_lay'+str(l.size)+'_mats'+str(num_mat)+'_n'+str(set_length)+date.strftime("%Y")+date.strftime("%m")+date.strftime("%d")
+	fname = 'traindata_enzchar'+'_lay'+str(l.size)+'_mats'+str(num_mat)+'_n'+str(set_length/1000)+'k_'+date.strftime("%Y")+date.strftime("%m")+date.strftime("%d")
 	# leave some comments so you know wtf you were doing here
-	com = '# Materials: Al2O3, Ag, Ge. nonuniform trange: [1,70],[1,30],[.1,3]nm respectively. return [ang,l,Rp,Rs,Tp,Ts,ellipsometric]'
-	com1 = '# datasets: 1 (batch) '
+	com = '# Materials: Al2O3, Ag, Ge. nonuniform trange: [1,70],[1,30],[.1,3]nm respectively. return [ang,l,Rp,Rs,Tp,Ts,ellipsometric]\n'
+	com1 = '# datasets: 1\n'
 	# ^ names of the datasets bc may use more than 1 per file
-	coms = open(fname+'comments.txt','w') # change to 'a' if adding stuff
-	coms.write(com)
-	coms.write(com1)
-	coms.close()
-	# appending any notes if running multiple times in 1 day
-	c = open(fname+'comments.txt','a')
-	c.write(comments)
-	c.close()
-
+	with open(fname+'comments.txt','a') as f:
+		f.write(com)
+		f.write(com1)
+		f.write(comments+'\n')
 	# count cores for multiprocessing
 	if core:
 		cores = 6
@@ -117,12 +113,12 @@ def gen_dat(ang, set_length, comments, dset, core=True):
 		cores = 1
 	print('Will parallelize with %d cores.\n'%(cores))
 	print('doing that data thang, please wait...')
-	# create .hdf5 file
-	f = h5py.File(fname+'.hdf5','w')
-	# dataset -> 'batch'+number
+	# if its more useful when recalling data may want to make a loop so it creates multiple dataset per file
 	res = Parallel(n_jobs=cores)(delayed(gen)() for i in range(set_length))
-	dset = f.create_dataset(dset,data=res)
+	print('puttin that mf in ya file')
+	# create .hdf5 file
+	with h5py.File(fname+'.hdf5','w') as h:
+		dat = h.create_dataset(dset,data=res)
 	del res
-	f.close()
 	print('congrats u done!')
 	return
