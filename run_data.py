@@ -11,4 +11,4 @@ com = 'angles: 55-5-65deg'
 setlen = 500
 
 # run the boi
-gen.gen_dat(ang,setlen,com)
+gen.gen_dat(ang,setlen,com,'data',core=False)

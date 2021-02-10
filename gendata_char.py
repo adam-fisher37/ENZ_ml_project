@@ -15,10 +15,10 @@ import dielectric_materials as di
 
 # import mats
 # wvl starts as nm, make m
-(wvl,nag,kag) = np.loadtxt('ag_550consts.txt',delimiter=',',usecols=(0,1,2),unpack=True)
-(nal2o3,kal2o3) = np.loadtxt('al2o3_550consts.txt',delimiter=',',usecols=(1,2),unpack=True)
-(nge,kge) = np.loadtxt('ge_550consts.txt',delimiter=',',usecols=(1,2),unpack=True)
-(ngl,kgl) = np.loadtxt('gl_550consts.txt',delimiter=',',usecols=(1,2),unpack=True)
+(wvl,nag,kag) = np.loadtxt('./materials/case_genosc.txt',usecols=(0,1,2),unpack=True)
+(nal2o3,kal2o3) = np.loadtxt('./materials/case_al2o3.txt',usecols=(1,2),unpack=True)
+(nge,kge) = np.loadtxt('./materials/case_ge.txt',usecols=(1,2),unpack=True)
+(ngl,kgl) = np.loadtxt('./materials/case_gl.txt',usecols=(1,2),unpack=True)
 wvl = wvl*1.0e-9
 # using index of refraction n + ik
 n_ag = np.array((nag+1j*kag),dtype=complex)
