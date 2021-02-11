@@ -12,4 +12,4 @@ BRANCH SYSTEM: main is for CODE ONLY, create a new branch with the pc name or la
 
 NOTE: the index of refraction for these materials can either be generated with theoretical models using: 'BB_metals.py', 'LD_metals.py', 'dielectric_materials.py'. OR can use experimentally derived tabulated data for the three ENZ materials in the folder 'materials', these were modeled by NANOPLASM Lab and Woolam to reflect the indices of refraction of the materials deposited in the MORE Center, with the most accurate being the ones with 'case_...' file names. 
 
-NOTE: index of refraction convention with an imaginary component is, $\tilde{n} = n + \mathrm{i}k$, with $\mathrm{i}$ as the imaginary unit.
+NOTE: index of refraction convention with an imaginary component is, n = n + ik, with i as the imaginary unit.
