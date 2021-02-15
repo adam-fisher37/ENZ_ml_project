@@ -324,7 +324,7 @@ def fix_phase(phi):
 @jit(nopython=True)
 def emax(l,n):
     '''
-    returns the effective medium approx in the direction of the incidence of light
+    returns the effective medium approx in the plane of the incidence of light
     inputs:
     l - Nx1 array, COMPLEX - the thickness of each layer for all N layers, nm
     NOTE: in order to work with numba, data types of intputs for np.dot, MUST be the same
@@ -338,7 +338,7 @@ def emax(l,n):
 @jit(nopython=True)
 def emaz(l,n):
 	'''
-	returns the ema approx perpendicular to the direction of the incidence of light
+	returns the ema approx perpendicular to the plane of the incidence of light
 	inputs:
     l - Nx1 array, COMPLEX - the thickness of each layer for all N layers, nm
     NOTE: in order to work with numba, data types of intputs for np.dot, MUST be the same
