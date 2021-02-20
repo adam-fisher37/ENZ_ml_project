@@ -12,6 +12,7 @@ from joblib import Parallel, delayed
 import TMM as tmm
 import LD_metals as ld
 import dielectric_materials as di
+from numba import jit
 
 # import mats
 # wvl starts as nm, make m
@@ -63,6 +64,7 @@ def gen_dat(ang, set_length, comments, dset, core=True):
 	OUTPUTS:
 	none - will generate and save the data and then close the file in this funct
 	'''
+	@jit(nopython=True)
 	def gen():
 		'this is the function that generates the data and will be iterated over'
 		# set up variables and allocate storage

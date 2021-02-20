@@ -13,23 +13,28 @@ import hyperopt as hopt
 import re
 import fnmatch as fm
 import os
+from numba import jit
 
 # data rescaling functions
 # currently rescaling thickness, aoi, psi, and delta
+@jit(nopython=True)
 def resc_l(thickness):
     'rescales the thicknesses to [0,1], takes in arrays'
     resc = thickness*1e7 
     return resc
+@jit(nopython=True)
 def resc_ang(aoi):
     'rescales the aoi to [0,1], takes in arrays in DEGREES'
     resc = aoi/90.
     return resc
+@jit(nopython=True)
 def resc_psi(psi):
     '''
     rescales ellipsometric coeff psi to basically [0,1], takes in array in DEGREES. returns in rescaled degrees
     '''
     resc = psi/90.
     return resc
+@jit(nopython=True)
 def resc_del(delta):
     '''
     rescales ellipsometric coeff delta to be positive (by adding phase shift if needed)
@@ -50,6 +55,7 @@ def decay(ep):
 lr = LRS(decay)
 
 #function to read in the data
+@jit(nopython=True)
 def read_dat(fname,dataset,nlay,nang,nwvl):
     '''
     function to read in the training data within an .h5 file and rescale
@@ -109,6 +115,7 @@ def read_dat(fname,dataset,nlay,nang,nwvl):
 
 # function that combines 'dead_dat' along with splitting the data
 # and rescales psi and delta
+@jit(nopython=True)
 def rs_dat(fname,dataset,nlay,nang,nwvl,n_tr,n_te,input_names,tr_dict,te_dict):
     '''
     function to read the data from the .h5 file with 'read_dat'
