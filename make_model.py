@@ -287,10 +287,12 @@ def build_mod(drop,nwvl,act='relu',input_names=None):
 
 # return current input values
 # CHANGE IF MODEL/DATA CHANGES
-def std_vari():
+def std_vari(output):
 	'''
 	returns standard variables that are used by functions in this file
-	outputs:
+	input:
+	output - bool - true to get the varis, false to not
+	output:
 	(nwvl,nang,nlay,dset,input_names) #iykyk
 	'''
 	wvl = np.linspace(400.,1000,121)
@@ -306,4 +308,10 @@ def std_vari():
 	print('dataset name: ',dset)
 	print('it is dangerous to go alone, take this!')
 	print('input tensor names: ',input_names)
-	return (nwvl,nang,nlay,dset,input_names)
+	if (output==True):
+		return (nwvl,nang,nlay,dset,input_names)
+	elif (output==False):
+		return
+	else:
+		print('why did you do that?')
+		return
